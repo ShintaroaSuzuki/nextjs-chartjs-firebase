@@ -5,7 +5,7 @@ module.exports = {
         includePaths: [path.join(__dirname, 'styles')]
     },
     env: {
-        FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+        NEXT_PUBLIC_FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
         FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
         FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
         FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
