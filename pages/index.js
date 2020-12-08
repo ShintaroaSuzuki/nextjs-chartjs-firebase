@@ -36,8 +36,8 @@ export default function Home() {
                 <h1 className="title">Radar Chart</h1>
                 <div className="inputDiv">
                     {[...Array(7)].map((_, i) => (
-                        <div className="inputUnit">
-                            <p>{labels[i]}</p>
+                        <div className="inputUnit" key={`inputUnit_${i}`}>
+                            <p key={`inputLabel_${i}`}>{labels[i]}</p>
                             <input
                                 key={`inputData_${i}`}
                                 className="inputArea"
