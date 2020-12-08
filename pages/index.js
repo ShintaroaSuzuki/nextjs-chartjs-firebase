@@ -1,200 +1,204 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import { useEffect } from 'react'
-import { useUser } from '../context/userContext'
-import firebase from '../firebase/clientApp'
+import Head from 'next/head';
+import Link from 'next/link';
+import { useState } from 'react';
+import firebase from '../firebase/clientApp';
+import RadarGraph from './radar';
 
 export default function Home() {
-  // Our custom hook to get context values
-  const { loadingUser, user } = useUser()
+    const [inputData, setInputData] = useState(Array(7).fill(null));
 
-  const profile = { username: 'nextjs_user', message: 'Awesome!!' }
+    const createUser = async () => {
+        const db = firebase.firestore();
+        await db
+            .collection('data')
+            .doc('data')
+            .update({ dataArray: inputData });
+    };
 
-  useEffect(() => {
-    if (!loadingUser) {
-      // You know that the user is loaded: either logged in or out!
-      console.log(user)
-    }
-    // You also have your firebase app initialized
-    console.log(firebase)
-  }, [loadingUser, user])
+    const labels = [
+        'Eating',
+        'Drinking',
+        'Sleeping',
+        'Designing',
+        'Coding',
+        'Cycling',
+        'Running'
+    ];
 
-  const createUser = async () => {
-    const db = firebase.firestore()
-    await db.collection('profile').doc(profile.username).set(profile)
-    alert('User created!!')
-  }
+    return (
+        <div className="container">
+            <Head>
+                <title>Radar Chart</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
 
-  return (
-    <div className="container">
-      <Head>
-        <title>Next.js w/ Firebase Client-Side</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+            <main>
+                <h1 className="title">Radar Chart</h1>
+                <div className="inputDiv">
+                    {[...Array(7)].map((_, i) => (
+                        <div className="inputUnit">
+                            <p>{labels[i]}</p>
+                            <input
+                                key={`inputData_${i}`}
+                                className="inputArea"
+                                onChange={(event) => {
+                                    const newInputData = inputData.slice();
+                                    newInputData[i] = event.target.value;
+                                    setInputData(newInputData);
+                                }}
+                            />
+                        </div>
+                    ))}
+                </div>
+                <button onClick={createUser}>submit</button>
+                <RadarGraph />
+            </main>
 
-      <main>
-        <h1 className="title">Next.js w/ Firebase Client-Side</h1>
-        <p className="description">Fill in your credentials to get started</p>
+            <style jsx>{`
+                .container {
+                    min-height: 100vh;
+                    padding: 0 0.5rem;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
 
-        <p className="description">
-          Cloud Firestore Security Rules write permissions are required for
-          adding users
-        </p>
-        <button onClick={createUser}>Create 'nextjs_user'</button>
+                main {
+                    padding: 5rem 0;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
 
-        <p className="description">
-          Please press the link below after adding the user
-        </p>
-        <Link href={`/profile/${profile.username}`} passHref>
-          <a>Go to SSR Page</a>
-        </Link>
-      </main>
+                footer {
+                    width: 100%;
+                    height: 100px;
+                    border-top: 1px solid #eaeaea;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
 
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
+                footer img {
+                    margin-left: 0.5rem;
+                }
 
-        main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-        }
+                footer a {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
 
-        footer {
-          width: 100%;
-          height: 100px;
-          border-top: 1px solid #eaeaea;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+                button {
+                    font-size: 1.5em;
+                    margin: 1em 0;
+                }
 
-        footer img {
-          margin-left: 0.5rem;
-        }
+                a {
+                    color: blue;
+                    font-size: 1.5em;
+                }
 
-        footer a {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
+                .title a {
+                    color: #0070f3;
+                    text-decoration: none;
+                }
 
-        button {
-          font-size: 1.5em;
-          margin: 1em 0;
-        }
+                .title a:hover,
+                .title a:focus,
+                .title a:active {
+                    text-decoration: underline;
+                }
 
-        a {
-          color: blue;
-          font-size: 1.5em;
-        }
+                .title {
+                    margin: 0;
+                    line-height: 1.15;
+                }
 
-        .title a {
-          color: #0070f3;
-          text-decoration: none;
-        }
+                .title,
+                .description {
+                    text-align: center;
+                }
 
-        .title a:hover,
-        .title a:focus,
-        .title a:active {
-          text-decoration: underline;
-        }
+                .description {
+                    line-height: 1.5;
+                    font-size: 1.5rem;
+                }
 
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-        }
+                code {
+                    background: #fafafa;
+                    border-radius: 5px;
+                    padding: 0.75rem;
+                    font-size: 1.1rem;
+                    font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
+                        DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New,
+                        monospace;
+                }
 
-        .title,
-        .description {
-          text-align: center;
-        }
+                .grid {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    max-width: 800px;
+                    margin-top: 3rem;
+                }
 
-        .description {
-          line-height: 1.5;
-          font-size: 1.5rem;
-        }
+                .card {
+                    margin: 1rem;
+                    flex-basis: 45%;
+                    padding: 1.5rem;
+                    text-align: left;
+                    color: inherit;
+                    text-decoration: none;
+                    border: 1px solid #eaeaea;
+                    border-radius: 10px;
+                    transition: color 0.15s ease, border-color 0.15s ease;
+                }
 
-        code {
-          background: #fafafa;
-          border-radius: 5px;
-          padding: 0.75rem;
-          font-size: 1.1rem;
-          font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-            DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-        }
+                .card:hover,
+                .card:focus,
+                .card:active {
+                    color: #0070f3;
+                    border-color: #0070f3;
+                }
 
-        .grid {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-          max-width: 800px;
-          margin-top: 3rem;
-        }
+                .card h3 {
+                    margin: 0 0 1rem 0;
+                    font-size: 1.5rem;
+                }
 
-        .card {
-          margin: 1rem;
-          flex-basis: 45%;
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid #eaeaea;
-          border-radius: 10px;
-          transition: color 0.15s ease, border-color 0.15s ease;
-        }
+                .card p {
+                    margin: 0;
+                    font-size: 1.25rem;
+                    line-height: 1.5;
+                }
 
-        .card:hover,
-        .card:focus,
-        .card:active {
-          color: #0070f3;
-          border-color: #0070f3;
-        }
+                @media (max-width: 600px) {
+                    .grid {
+                        width: 100%;
+                        flex-direction: column;
+                    }
+                }
+            `}</style>
 
-        .card h3 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-        }
+            <style jsx global>{`
+                html,
+                body {
+                    padding: 0;
+                    margin: 0;
+                    font-family: -apple-system, BlinkMacSystemFont, Segoe UI,
+                        Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
+                        Helvetica Neue, sans-serif;
+                }
 
-        .card p {
-          margin: 0;
-          font-size: 1.25rem;
-          line-height: 1.5;
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            width: 100%;
-            flex-direction: column;
-          }
-        }
-      `}</style>
-
-      <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
-
-        * {
-          box-sizing: border-box;
-        }
-      `}</style>
-    </div>
-  )
+                * {
+                    box-sizing: border-box;
+                }
+            `}</style>
+        </div>
+    );
 }

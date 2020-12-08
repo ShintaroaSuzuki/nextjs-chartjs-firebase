@@ -7,11 +7,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "chart.js": "^2.9.4",
     "firebase": "7.17.0",
-    "firebase-admin": "9.0.0",
+    "firebase-admin": "^9.4.1",
     "next": "latest",
     "react": "^16.13.0",
-    "react-dom": "^16.13.0"
+    "react-chartjs-2": "^2.11.1",
+    "react-dom": "^16.13.0",
+    "sass": "^1.30.0"
   },
   "license": "MIT"
 }
