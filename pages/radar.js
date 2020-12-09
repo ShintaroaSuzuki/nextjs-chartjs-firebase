@@ -42,9 +42,9 @@ const RadarDiv = () => {
     const options = {
         scale: {
             ticks: {
-                max: 100,
+                max: 200,
                 min: 0,
-                stepSize: 10
+                stepSize: 20
             }
         }
     };
