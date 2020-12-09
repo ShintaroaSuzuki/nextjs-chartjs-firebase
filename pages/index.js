@@ -5,7 +5,7 @@ import firebase from '../firebase/clientApp';
 import RadarGraph from './radar';
 
 export default function Home() {
-    const [inputData, setInputData] = useState(Array(7).fill(null));
+    const [inputData, setInputData] = useState(Array(6).fill(null));
 
     const createUser = async () => {
         const db = firebase.firestore();
