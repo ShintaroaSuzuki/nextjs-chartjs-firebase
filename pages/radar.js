@@ -18,13 +18,12 @@ const RadarDiv = () => {
 
     const data = {
         labels: [
-            'Eating',
-            'Drinking',
-            'Sleeping',
-            'Designing',
-            'Coding',
-            'Cycling',
-            'Running'
+            'HP',
+            'こうげき',
+            'ぼうぎょ',
+            'とくこう',
+            'とくぼう',
+            'すばやさ'
         ],
         datasets: [
             {

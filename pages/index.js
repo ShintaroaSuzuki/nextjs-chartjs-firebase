@@ -16,13 +16,12 @@ export default function Home() {
     };
 
     const labels = [
-        'Eating',
-        'Drinking',
-        'Sleeping',
-        'Designing',
-        'Coding',
-        'Cycling',
-        'Running'
+        'HP',
+        'こうげき',
+        'ぼうぎょ',
+        'とくこう',
+        'とくぼう',
+        'すばやさ'
     ];
 
     return (
@@ -35,7 +34,7 @@ export default function Home() {
             <main>
                 <h1 className="title">Radar Chart</h1>
                 <div className="inputDiv">
-                    {[...Array(7)].map((_, i) => (
+                    {[...Array(6)].map((_, i) => (
                         <div className="inputUnit" key={`inputUnit_${i}`}>
                             <p key={`inputLabel_${i}`}>{labels[i]}</p>
                             <input
